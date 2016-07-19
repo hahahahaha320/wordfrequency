@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jyutping">
+	
+	<insert id="insert" parameterType="com.wlw.jyutping.Jyutping">
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+	      	SELECT LAST_INSERT_ID()
+	    </selectKey>
+	    insert into jyutping_ori
+	    <trim prefix="(" suffix=")" suffixOverrides="," >
+		    <if test="word != null" >word,</if>
+		    <if test="times != null" >times,</if>
+		    <if test="pingyin != null" >pingyin,</if>
+		    <if test="tone != null" >tone,</if>
+		    <if test="allPingyin != null" >all_pingyin,</if>
+		    <if test="goodPingyin != null" >good_pingyin,</if>
+		    <if test="src != null" >src,</if>
+		    ctm,
+      	</trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="word != null" >#{word},</if>
+			<if test="times != null" >#{times},</if>
+			<if test="pingyin != null" >#{pingyin},</if>
+			<if test="tone != null" >#{tone},</if>
+			<if test="allPingyin != null" >#{allPingyin},</if>
+			<if test="goodPingyin != null" >#{goodPingyin},</if>
+			<if test="src != null" >#{src},</if>
+		    now(),
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="com.wlw.jyutping.Jyutping">
+	    update jyutping_ori
+	    <set>
+			<if test="word != null" >word = #{word},</if>
+			<if test="times != null" >times = #{times},</if>
+			<if test="pingyin != null" >pingyin = #{pingyin},</if>
+			<if test="tone != null" >tone = #{tone},</if>
+			<if test="allPingyin != null" >all_pingyin = #{allPingyin},</if>
+			<if test="goodPingyin != null" >good_pingyin = #{goodPingyin},</if>
+			<if test="src != null" >src = #{src},</if>
+	    </set>
+	    where id = #{id}
+	</update>
+	
+	
+	<select id="getJyutping" resultType="string">
+		select word from jyutping_ori where all_pingyin is null or all_pingyin='' limit #{value}
+	</select>
+	<update id="updateByWord" parameterType="com.wlw.jyutping.Jyutping">
+	    update jyutping_ori set all_pingyin=#{allPingyin},good_pingyin=#{goodPingyin},
+	    pingyin=#{pingyin},tone=#{tone}
+	    
+	    where word=#{word}
+	</update>
+	
+	<update id="updateError" parameterType="com.wlw.jyutping.Jyutping">
+	    update jyutping_ori set all_pingyin='error',status='error' where instr(#{value},word)>0;
+	</update>
+	<update id="resetErrorToNull">
+		update jyutping_ori set all_pingyin =null,status=null 
+		where all_pingyin='error' and status='error'
+	</update>
+	
+	<select id="getAllJyutping" resultType="string">
+		select word from jyutping_ori 
+	</select>
+	<update id="updateHanyuPingByWord" parameterType="com.wlw.jyutping.Jyutping">
+	    update jyutping_ori set hanyu_pingyin_full=#{hanyuPingyinFull},hanyu_pingyin_fulls=#{hanyuPingyinFulls},
+	    	hanyu_pingyin=#{hanyuPingyin},hanyu_tone=#{hanyuTone}
+	    where word=#{word}
+	</update>
+	
+	<select id="getTopFreWord" resultType="com.wlw.jyutping.Jyutping">
+		select id,word,good_pingyin goodPingyin from jyutping_ori where id&gt;=1001 and id &lt;=1600 
+		order by substring(pingyin,1,2) asc,substring(pingyin,2) asc,times desc
+	</select>
+	
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" " http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd"> -->
+<configuration>
+	<jmxConfigurator />
+ 	
+ 	<property resource="config.properties" />
+ 	
+ 	<!-- 控制台appender -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50} - %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	<!-- 所有级别文件appender -->
+	<appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<File>${log.base.path}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base.path}.%d{yyyy-MM-dd}.log</FileNamePattern>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50} -  %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	<!-- ERROR级别appender -->
+	<appender name="errLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<File>${log.base.path}.err.log</File>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">  
+            <level>ERROR</level>  
+        </filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base.path}.err.%d{yyyy-MM-dd}.log</FileNamePattern>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50} -  %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	<root>
+		<level value="${log.root.level}" />
+		<appender-ref ref="stdout" />
+		<appender-ref ref="logFile" />
+		<appender-ref ref="errLogFile" />
+	</root>
+	
+	<!-- wxapi log appender -->
+	<appender name="wxapiLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<File>${log.base.path}.wxapi.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base.path}.wxapi.%d{yyyy-MM-dd}.log</FileNamePattern>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50} -  %msg%n</pattern>
+		</layout>
+	</appender>
+	<logger name="wxapiLog" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="wxapiLogFile" />
+	</logger>
+	
+	<!-- error sql appender -->
+	<appender name="errSqlLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<File>${log.base.path}.errsql.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base.path}.errsql.%d{yyyy-MM-dd}.log</FileNamePattern>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{50} -  %msg%n</pattern>
+		</layout>
+	</appender>
+	<logger name="errSqlLog" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="errSqlLogFile" />
+	</logger>
+	
+</configuration>
+

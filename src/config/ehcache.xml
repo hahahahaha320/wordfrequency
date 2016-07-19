@@ -1,0 +1,15 @@
+<ehcache>  
+    <diskStore path="user.home/wordfrequency_work"/>  
+    <defaultCache  
+           maxElementsInMemory="200000"  
+           eternal="false"  
+           timeToIdleSeconds="0"  
+           timeToLiveSeconds="0"  
+           overflowToDisk="false"/>  
+    <cache name="myCache"  
+           maxElementsOnDisk="50000"  
+           maxElementsInMemory="200000"  
+           eternal="false"  
+           overflowToDisk="false"  
+           diskPersistent="false"/>  
+</ehcache>
